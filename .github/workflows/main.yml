@@ -32,4 +32,9 @@ jobs:
       - name: Build wine
         run: cd wine && ../compile_wine.sh
       
-      - name 
+
+
+
+
+
+
