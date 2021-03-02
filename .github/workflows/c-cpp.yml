@@ -24,17 +24,20 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-
       - name: Set up dependencies
-        run : ./set_up_build_dependency.sh
-      - name: Fetch wine code
+        run: brew install bison mingw-w64
+
+      - name: Fetch wine source
         run: git clone --depth=1 https://github.com/wine-mirror/wine.git
-      - name: Build wine
-        run: cd wine && ../compile_wine.sh
-
-
-
-
-
-
-
+        
+      # Have configure as it's own step incase things change
+      - name: Configure wine64
+        run: |
+          cd $GITHUB_WORKSPACE/wine
+          ./configure --enable-win64 BISON=$(brew --prefix bison)/bin/bison MACOSX_DEPLOYMENT_TARGET=10.14
+      
+      # Build wine64 as it's own step
+      - name: Build wine64
+        run: |
+          cd $GITHUB_WORKSPACE/wine
+          make -j$(sysctl -n hw.ncpu 2>/dev/null)
