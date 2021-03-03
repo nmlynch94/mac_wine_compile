@@ -32,6 +32,7 @@ jobs:
         run: |
            sudo port selfupdate
            sudo port install bison
+           sudo port list
 
       - name: Fetch wine source
         run: git clone --depth=1 https://github.com/wine-mirror/wine.git
