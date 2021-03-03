@@ -33,6 +33,7 @@ jobs:
            sudo port selfupdate
            sudo port install     bison \
                                  faudio \
+                                 freetype \
                                  gnutls \
                                  mingw-w64
 
@@ -78,6 +79,7 @@ jobs:
            sudo port install     autoconf \
                                  bison \
                                  faudio \
+                                 freetype \
                                  gnutls \
                                  mingw-w64
 
