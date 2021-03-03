@@ -1,0 +1,96 @@
+name: homebrew
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+  workflow_dispatch:
+
+jobs:
+  wine-devel:
+    runs-on:  macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          brew install --cask xquartz
+          brew install  bison \
+                        faudio \
+                        gphoto2 \
+                        gst-plugins-base \
+                        little-cms2 \
+                        mingw-w64 \
+                        molten-vk \
+                        mpg123 \
+                        sdl2
+
+      - name: Fetch wine source
+        run: git clone --depth=1 https://github.com/wine-mirror/wine.git
+
+      - name: Configure wine64
+        run: |
+          cd $GITHUB_WORKSPACE/wine
+          ./configure   --enable-win64 \
+                        --without-pulse \
+                        --without-v4l2 \
+                        --without-oss \
+                        BISON=$(brew --prefix bison)/bin/bison \
+                        MACOSX_DEPLOYMENT_TARGET=10.14
+
+      - name: Build wine64
+        run: |
+          cd $GITHUB_WORKSPACE/wine
+          make -j$(sysctl -n hw.ncpu 2>/dev/null)
+
+  wine-staging:
+    runs-on:  macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          brew install --cask xquartz
+          brew install  bison \
+                        faudio \
+                        gphoto2 \
+                        gst-plugins-base \
+                        little-cms2 \
+                        mingw-w64 \
+                        molten-vk \
+                        mpg123 \
+                        sdl2
+
+      - name: Fetch wine-staging source
+        run: git clone --depth=1 https://github.com/wine-staging/wine-staging
+
+      - name: Grab winesource from staging
+        run: |
+          mkdir $GITHUB_WORKSPACE/wine
+          cd wine
+          git init
+          git fetch https://github.com/wine-mirror/wine.git $($GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh --upstream-commit) --depth=1
+          git checkout $($GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh --upstream-commit)
+
+      - name: Apply Staging patches
+        run: |
+          $GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh DESTDIR=$GITHUB_WORKSPACE/wine
+
+      - name: Configure wine64
+        run: |
+          cd $GITHUB_WORKSPACE/wine
+          ./configure   --enable-win64 \
+                        --without-pulse \
+                        --without-v4l2 \
+                        --without-oss \
+                        BISON=$(brew --prefix bison)/bin/bison \
+                        MACOSX_DEPLOYMENT_TARGET=10.14
+
+      - name: Build wine64
+        run: |
+          cd $GITHUB_WORKSPACE/wine
+          make -j$(sysctl -n hw.ncpu 2>/dev/null)
