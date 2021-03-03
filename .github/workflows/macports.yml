@@ -20,6 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          export PATH=/opt/local/bin:$PATH
           sudo port install     bison \
                                 faudio \
                                 gnutls \
@@ -30,6 +31,7 @@ jobs:
 
       - name: Configure wine64
         run: |
+          export PATH=/opt/local/bin:$PATH
           cd $GITHUB_WORKSPACE/wine
           ./configure   --enable-win64 \
                         --without-pulse \
@@ -39,6 +41,7 @@ jobs:
 
       - name: Build wine64
         run: |
+          export PATH=/opt/local/bin:$PATH
           cd $GITHUB_WORKSPACE/wine
           make -j$(sysctl -n hw.ncpu 2>/dev/null)
 
@@ -53,7 +56,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo port install     bison \
+          export PATH=/opt/local/bin:$PATH
+          sudo port install     autoconf \
+                                bison \
                                 faudio \
                                 gnutls \
                                 mingw-w64
@@ -71,10 +76,12 @@ jobs:
 
       - name: Apply Staging patches
         run: |
+          export PATH=/opt/local/bin:$PATH
           $GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh DESTDIR=$GITHUB_WORKSPACE/wine
 
       - name: Configure wine64
         run: |
+          export PATH=/opt/local/bin:$PATH
           cd $GITHUB_WORKSPACE/wine
           ./configure   --enable-win64 \
                         --without-pulse \
