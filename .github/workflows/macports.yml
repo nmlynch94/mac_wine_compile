@@ -21,10 +21,6 @@ jobs:
       - name: Determine list of changed ports
         run: |
           set -eu
-          # Add getopt, mpbb and the MacPorts paths to $PATH for the subsequent
-          # steps.
-          echo "/opt/mports/bin" >> $GITHUB_PATH
-          echo "${PWD}/mpbb" >> $GITHUB_PATH
           echo "/opt/local/bin" >> $GITHUB_PATH
           echo "/opt/local/sbin" >> $GITHUB_PATH
 
@@ -34,6 +30,7 @@ jobs:
            sudo port install     bison \
                                  faudio \
                                  freetype \
+                                 gstreamer1-gst-plugins-base \
                                  gnutls \
                                  mingw-w64
 
@@ -66,10 +63,6 @@ jobs:
       - name: Determine list of changed ports
         run: |
           set -eu
-          # Add getopt, mpbb and the MacPorts paths to $PATH for the subsequent
-          # steps.
-          echo "/opt/mports/bin" >> $GITHUB_PATH
-          echo "${PWD}/mpbb" >> $GITHUB_PATH
           echo "/opt/local/bin" >> $GITHUB_PATH
           echo "/opt/local/sbin" >> $GITHUB_PATH
 
@@ -80,6 +73,7 @@ jobs:
                                  bison \
                                  faudio \
                                  freetype \
+                                 gstreamer1-gst-plugins-base \
                                  gnutls \
                                  mingw-w64
 
