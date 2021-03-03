@@ -30,6 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+           sudo port selfupdate
            sudo port install     bison \
                                  faudio \
                                  gnutls \
@@ -73,11 +74,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo port install     autoconf \
-                                bison \
-                                faudio \
-                                gnutls \
-                                mingw-w64
+           sudo port selfupdate
+           sudo port install     autoconf \
+                                 bison \
+                                 faudio \
+                                 gnutls \
+                                 mingw-w64
 
       - name: Fetch wine-staging source
         run: git clone --depth=1 https://github.com/wine-staging/wine-staging
