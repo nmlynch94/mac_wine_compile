@@ -31,8 +31,10 @@ jobs:
       - name: Install dependencies
         run: |
            sudo port selfupdate
-           sudo port install bison
-           sudo port list
+           sudo port install     bison \
+                                 faudio \
+                                 gnutls \
+                                 mingw-w64
 
       - name: Fetch wine source
         run: git clone --depth=1 https://github.com/wine-mirror/wine.git
