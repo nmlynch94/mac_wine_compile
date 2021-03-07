@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# https://github.com/macports/macports-ports/blob/master/.github/workflows/bootstrap.sh
+# The above link is the original source of this script before editing
+# This worked better then the github action for installing Macports
+
 set -e
 
 OS_MAJOR=$(uname -r | cut -f 1 -d .)
@@ -10,6 +14,7 @@ case "$OS_ARCH" in
         ;;
 esac
 
+
 echo "::group::Disabling Spotlight"
 # Disable Spotlight indexing. We don't need it, and it might cost performance
 sudo mdutil -a -i off
@@ -17,7 +22,6 @@ echo "::endgroup::"
 
 
 echo "::group::Uninstalling Homebrew"
-
 # Move directories to /opt/off
 echo "Moving directories..."
 sudo mkdir /opt/off
@@ -31,14 +35,13 @@ echo "Removing files..."
 hash -r
 echo "::endgroup::"
 
+
 echo "::group::Installing MacPorts"
 echo "Fetching..."
 # Download resources in background ASAP but use later; do this after cleaning
 # up Homebrew so that we don't end up using their curl!
 curl -fsSLO "https://dl.bintray.com/macports-ci-env/macports-base/MacPorts-${OS_MAJOR}.tar.bz2" &
 curl_mpbase_pid=$!
-curl -fsSLO "https://dl.bintray.com/macports-ci-bot/getopt/getopt-v1.1.6.tar.bz2" &
-curl_getopt_pid=$!
 
 # Download and install MacPorts built by https://github.com/macports/macports-base/tree/master/.github
 wait $curl_mpbase_pid
@@ -64,15 +67,9 @@ echo "archive_site_local https://packages.macports.org/:tbz2 https://packages-pr
 #echo "preferred_hosts packages.macports.org" | sudo tee -a /opt/local/etc/macports/macports.conf >/dev/null
 echo "::endgroup::"
 
+
 echo "::group::Running postflight"
 # Create macports user
 echo "Postflight..."
 sudo /opt/local/libexec/macports/postflight/postflight
-echo "::endgroup::"
-
-echo "::group::Installing getopt"
-# Install getopt required by mpbb
-wait $curl_getopt_pid
-echo "Extracting..."
-sudo tar -xpf "getopt-v1.1.6.tar.bz2" -C /
 echo "::endgroup::"

@@ -18,9 +18,9 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Install macports
-        run: . $GITHUB_WORKSPACE/.github/workflows/bootstrap.sh
+        run: . $GITHUB_WORKSPACE/.github/workflows/bootstrap_macports.sh
         
-      - name: Determine list of changed ports
+      - name: Add Macports to PATH
         run: |
           set -eu
           echo "/opt/local/bin" >> $GITHUB_PATH
@@ -40,13 +40,19 @@ jobs:
         run: git clone --depth=1 https://github.com/wine-mirror/wine.git
 
       - name: Configure wine64
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "10.14"
         run: |
           cd $GITHUB_WORKSPACE/wine
           ./configure   --enable-win64 \
-                        --without-pulse \
-                        --without-v4l2 \
+                        --without-alsa \
+                        --without-capi \
+                        --without-dbus \
+                        --without-inotify \
                         --without-oss \
-                        MACOSX_DEPLOYMENT_TARGET=10.14
+                        --without-pulse \
+                        --without-udev \
+                        --without-v4l2
 
       - name: Build wine64
         run: |
@@ -60,7 +66,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install macports
-        run: . $GITHUB_WORKSPACE/.github/workflows/bootstrap.sh
+        run: . $GITHUB_WORKSPACE/.github/workflows/bootstrap_macports.sh
 
       - name: Determine list of changed ports
         run: |
@@ -95,13 +101,19 @@ jobs:
           $GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh DESTDIR=$GITHUB_WORKSPACE/wine
 
       - name: Configure wine64
+        env:
+          MACOSX_DEPLOYMENT_TARGET: "10.14"
         run: |
           cd $GITHUB_WORKSPACE/wine
           ./configure   --enable-win64 \
-                        --without-pulse \
-                        --without-v4l2 \
+                        --without-alsa \
+                        --without-capi \
+                        --without-dbus \
+                        --without-inotify \
                         --without-oss \
-                        MACOSX_DEPLOYMENT_TARGET=10.14
+                        --without-pulse \
+                        --without-udev \
+                        --without-v4l2
 
       - name: Build wine64
         run: |
