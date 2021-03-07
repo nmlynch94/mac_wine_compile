@@ -2,6 +2,8 @@ name: macports
 
 on:
   push:
+    paths-ignore:
+    - '.github/**'
     branches: [ main ]
   pull_request:
     branches: [ main ]
@@ -39,6 +41,9 @@ jobs:
 
       - name: Configure wine64
         env:
+          # Make dlopen() function like wine_dlopen()
+          LDFLAGS: "-Wl,-headerpad_max_install_names,-rpath,@loader_path/../,-rpath,/opt/local/lib,-rpath,/opt/X11/lib"
+          # Avoid weird linker errors with Xcode 10 and later
           MACOSX_DEPLOYMENT_TARGET: "10.14"
         run: |
           cd $GITHUB_WORKSPACE/wine
@@ -100,6 +105,9 @@ jobs:
 
       - name: Configure wine64
         env:
+          # Make dlopen() function like wine_dlopen()
+          LDFLAGS: "-Wl,-headerpad_max_install_names,-rpath,@loader_path/../,-rpath,/opt/local/lib,-rpath,/opt/X11/lib"
+          # Avoid weird linker errors with Xcode 10 and later
           MACOSX_DEPLOYMENT_TARGET: "10.14"
         run: |
           cd $GITHUB_WORKSPACE/wine
