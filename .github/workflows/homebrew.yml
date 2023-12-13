@@ -32,7 +32,7 @@ jobs:
       - name: Fetch wine source
         run: git clone --depth=1 https://github.com/wine-mirror/wine.git
 
-      - name: Configure wine64
+      - name: Configure wine
         env:
           LDFLAGS: "-Wl,-headerpad_max_install_names -Wl,-rpath,/usr/local/lib"
           # Avoid weird linker errors with Xcode 10 and later
@@ -50,7 +50,7 @@ jobs:
                         --without-wayland \
                         --without-x
 
-      - name: Build wine64
+      - name: Build wine
         run: |
           cd $GITHUB_WORKSPACE/wine
           make -j$(sysctl -n hw.ncpu 2>/dev/null)
