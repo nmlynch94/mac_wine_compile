@@ -19,29 +19,22 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install --cask xquartz
           brew install  bison \
-                        faudio \
-                        gphoto2 \
-                        gst-plugins-base \
-                        little-cms2 \
+                        gstreamer \
                         mingw-w64 \
-                        molten-vk \
-                        mpg123
+                        molten-vk
 
-      - name: Add bison & krb5 to $PATH
+      - name: Add bison to $PATH
         run: |
           set -eu
           echo "$(brew --prefix bison)/bin" >> $GITHUB_PATH
-          echo "$(brew --prefix krb5)/bin" >> $GITHUB_PATH
 
       - name: Fetch wine source
         run: git clone --depth=1 https://github.com/wine-mirror/wine.git
 
       - name: Configure wine64
         env:
-          # Make dlopen() function like wine_dlopen()
-          LDFLAGS: "-Wl,-headerpad_max_install_names,-rpath,@loader_path/../,-rpath,/opt/X11/lib"
+          LDFLAGS: "-Wl,-headerpad_max_install_names -Wl,-rpath,/usr/local/lib"
           # Avoid weird linker errors with Xcode 10 and later
           MACOSX_DEPLOYMENT_TARGET: "10.14"
         run: |
@@ -54,9 +47,7 @@ jobs:
                         --without-oss \
                         --without-pulse \
                         --without-udev \
-                        --without-v4l2 \
-                        --x-include=/opt/X11/include \
-                        --x-lib=/opt/X11/lib
+                        --without-v4l2
 
       - name: Build wine64
         run: |
@@ -71,21 +62,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install --cask xquartz
           brew install  bison \
-                        faudio \
-                        gphoto2 \
-                        gst-plugins-base \
-                        little-cms2 \
+                        gstreamer \
                         mingw-w64 \
-                        molten-vk \
-                        mpg123
+                        molten-vk
 
-      - name: Add bison & krb5 to $PATH
+      - name: Add bison to $PATH
         run: |
           set -eu
           echo "$(brew --prefix bison)/bin" >> $GITHUB_PATH
-          echo "$(brew --prefix krb5)/bin" >> $GITHUB_PATH
 
       - name: Fetch wine-staging source
         run: git clone --depth=1 https://github.com/wine-staging/wine-staging
@@ -104,8 +89,7 @@ jobs:
 
       - name: Configure wine64
         env:
-          # Make dlopen() function like wine_dlopen()
-          LDFLAGS: "-Wl,-headerpad_max_install_names,-rpath,@loader_path/../,-rpath,/opt/X11/lib"
+          LDFLAGS: "-Wl,-headerpad_max_install_names -Wl,-rpath,/usr/local/lib"
           # Avoid weird linker errors with Xcode 10 and later
           MACOSX_DEPLOYMENT_TARGET: "10.14"
         run: |
@@ -118,9 +102,7 @@ jobs:
                         --without-oss \
                         --without-pulse \
                         --without-udev \
-                        --without-v4l2 \
-                        --x-include=/opt/X11/include \
-                        --x-lib=/opt/X11/lib
+                        --without-v4l2
 
       - name: Build wine64
         run: |
