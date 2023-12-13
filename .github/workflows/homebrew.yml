@@ -21,7 +21,8 @@ jobs:
         run: |
           brew install  bison \
                         mingw-w64 \
-                        molten-vk
+                        molten-vk \
+                        sld2
 
       - name: Add bison to $PATH
         run: |
@@ -42,11 +43,12 @@ jobs:
                         --without-alsa \
                         --without-capi \
                         --without-dbus \
-                        --without-inotify \
                         --without-oss \
                         --without-pulse \
                         --without-udev \
-                        --without-v4l2
+                        --without-v4l2 \
+                        --without-wayland \
+                        --without-x11
 
       - name: Build wine64
         run: |
