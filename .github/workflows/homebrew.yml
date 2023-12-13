@@ -22,7 +22,7 @@ jobs:
           brew install  bison \
                         mingw-w64 \
                         molten-vk \
-                        sld2
+                        sdl2
 
       - name: Add bison to $PATH
         run: |
