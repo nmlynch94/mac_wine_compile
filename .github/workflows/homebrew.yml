@@ -48,7 +48,7 @@ jobs:
                         --without-udev \
                         --without-v4l2 \
                         --without-wayland \
-                        --without-x11
+                        --without-x
 
       - name: Build wine64
         run: |
