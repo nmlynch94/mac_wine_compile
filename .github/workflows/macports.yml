@@ -42,10 +42,8 @@ jobs:
 
       - name: Grab winesource from staging
         run: |
-          mkdir $GITHUB_WORKSPACE/wine
+          git clone https://github.com/wine-mirror/wine.git $($GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh --upstream-commit) --depth=1
           cd wine
-          git init
-          git fetch https://github.com/wine-mirror/wine.git $($GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh --upstream-commit) --depth=1
           git checkout $($GITHUB_WORKSPACE/wine-staging/patches/patchinstall.sh --upstream-commit)
 
       - name: Apply Staging patches
