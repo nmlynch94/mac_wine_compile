@@ -42,7 +42,7 @@ jobs:
 
       - name: Grab winesource from staging
         run: |
-          git clone https://github.com/wine-mirror/wine.git $($GITHUB_WORKSPACE/wine-staging/staging/patchinstall.py --upstream-commit) --depth=1
+          git clone https://github.com/wine-mirror/wine.git --depth=1
           cd wine
           git checkout $($GITHUB_WORKSPACE/wine-staging/staging/patchinstall.py --upstream-commit)
 
