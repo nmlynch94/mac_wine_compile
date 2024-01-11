@@ -48,7 +48,7 @@ jobs:
 
       - name: Apply Staging patches
         run: |
-          $GITHUB_WORKSPACE/wine-staging/staging/patchinstall.py DESTDIR=$GITHUB_WORKSPACE/wine
+          $GITHUB_WORKSPACE/wine-staging/staging/patchinstall.py DESTDIR=$GITHUB_WORKSPACE/wine --all
 
       - name: Configure wine64
         env:
