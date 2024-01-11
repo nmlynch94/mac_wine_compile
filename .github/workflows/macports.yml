@@ -42,7 +42,7 @@ jobs:
 
       - name: Grab winesource from staging
         run: |
-          git clone https://github.com/wine-mirror/wine.git --depth=1
+          git clone https://github.com/wine-mirror/wine.git
           cd wine
           git checkout $($GITHUB_WORKSPACE/wine-staging/staging/patchinstall.py --upstream-commit)
 
@@ -76,9 +76,8 @@ jobs:
           
       - name: Install wine64
         run: |
-          pushd ${{ env.BUILDROOT }}/wine64
+          cd $GITHUB_WORKSPACE/wine
           make -j$(sysctl -n hw.ncpu 2>/dev/null) install
-          popd
 
       - name: Tar Wine
         run: |
